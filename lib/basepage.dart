@@ -13,6 +13,198 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        if (_index == 0) {
+          return true;
+        } else {
+          setState(() {
+            _index = 0;
+          });
+          return false;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: _index == 1
+              ? Text('Order Saya')
+              : _index == 2
+                  ? Text('Bantuan')
+                  : _index == 3
+                      ? Text('Akun Saya')
+                      : Text('Berandaku'),
+          leading: _index == 2 || _index == 3
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    setState(() {
+                      _index = 0;
+                    });
+                  },
+                )
+              : null,
+          actions: _index == 1
+              ? [
+                  IconButton(
+                    icon: Icon(Icons.filter_list),
+                    onPressed: () {},
+                  ),
+                ]
+              : null,
+        ),
+        extendBody: true,
+        body: _index == 1
+            ? OrderkuPage()
+            : _index == 2
+                ? BantuanPage()
+                : _index == 3
+                    ? Text('Halaman Akun Saya')
+                    : BerandakuPage(),
+        bottomNavigationBar: FloatingNavbar(
+          onTap: (int val) => setState(() => _index = val),
+          currentIndex: _index,
+          items: [
+            FloatingNavbarItem(icon: Icons.home, title: 'Berandaku'),
+            FloatingNavbarItem(icon: Icons.receipt_outlined, title: 'Orderku'),
+            FloatingNavbarItem(icon: Icons.help_rounded, title: 'Bantuan'),
+            FloatingNavbarItem(icon: Icons.people, title: 'Akun Saya'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BerandakuPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        _buildBannerCarousel(), // Carousel banner
+        _buildCategoryList(), // Daftar kategori produk
+        _buildProductHorizontalList(), // Horizontal list produk
+        _buildProductVerticalList(), // Vertical list produk
+      ],
+    );
+  }
+
+  Widget _buildBannerCarousel() {
+    // Ganti dengan widget carousel yang sesuai
+    return Container(
+      height: 200,
+      color: Colors.blue,
+      child: Center(
+        child: Text(
+          'Selamat Datang Di Vestido',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryList() {
+    // Ganti dengan daftar kategori produk yang sesuai
+    return Container(
+      height: 100,
+      color: Colors.grey[200],
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Container(
+            width: 100,
+            margin: EdgeInsets.all(8),
+            color: Colors.white,
+            child: Center(
+              child: Text(
+                'Kategori $index',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductHorizontalList() {
+    // Ganti dengan daftar produk horizontal yang sesuai
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            margin: EdgeInsets.all(8),
+            color: Colors.grey[300],
+            child: Center(
+              child: Text(
+                'Produk $index',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductVerticalList() {
+    // Ganti dengan daftar produk vertical yang sesuai
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Image.network(
+            'https://via.placeholder.com/50', // Ganti dengan URL gambar produk
+            height: 50,
+            width: 50,
+          ),
+          title: Text(
+            'Produk $index', // Ganti dengan nama produk
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            'Rp 100.000', // Ganti dengan harga produk
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class OrderkuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -82,76 +274,6 @@ class BantuanPage extends StatelessWidget {
           subtitle: Text('www.vestido.com'),
         ),
       ],
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _index = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_index == 0) {
-          return true;
-        } else {
-          setState(() {
-            _index = 0;
-          });
-          return false;
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: _index == 1
-              ? Text('Order Saya')
-              : _index == 2
-                  ? Text('Bantuan')
-                  : _index == 3
-                      ? Text('Akun Saya')
-                      : null,
-          leading: _index == 2 || _index == 3
-              ? IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    setState(() {
-                      _index = 0;
-                    });
-                  },
-                )
-              : null,
-          actions: _index == 1
-              ? [
-                  IconButton(
-                    icon: Icon(Icons.filter_list),
-                    onPressed: () {},
-                  ),
-                ]
-              : null,
-        ),
-        extendBody: true,
-        body: _index == 1
-            ? OrderkuPage()
-            : _index == 2
-                ? BantuanPage()
-                : null,
-        bottomNavigationBar: FloatingNavbar(
-          onTap: (int val) => setState(() => _index = val),
-          currentIndex: _index,
-          items: [
-            FloatingNavbarItem(icon: Icons.home, title: 'Berandaku'),
-            FloatingNavbarItem(icon: Icons.receipt_outlined, title: 'Orderku'),
-            FloatingNavbarItem(icon: Icons.help_rounded, title: 'Bantuan'),
-            FloatingNavbarItem(icon: Icons.people, title: 'Akun Saya'),
-          ],
-        ),
-      ),
     );
   }
 }
